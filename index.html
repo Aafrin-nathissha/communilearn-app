@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommuniLearn</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #334155; /* Darker text */
+        }
+        /* Custom scrollbar for textareas */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6; /* Blue */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-8 px-4">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl text-center mb-10">
+        <h1 class="text-5xl font-extrabold text-blue-700 mb-4 rounded-lg p-2 bg-white shadow-lg">CommuniLearn</h1>
+        <p class="text-xl text-gray-600">Improve communication, enhance pronunciation, and perfect your grammar.</p>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Tongue Twister Generator Section -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl border border-blue-100">
+            <h2 class="text-3xl font-bold text-blue-600 mb-6 text-center">Tongue Twister Generator</h2>
+
+            <!-- Difficulty Selection -->
+            <div class="mb-6 flex flex-wrap justify-center gap-3">
+                <button id="basicBtn" class="level-btn bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-400">Basic</button>
+                <button id="intermediateBtn" class="level-btn bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-5 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400">Intermediate</button>
+                <button id="advancedBtn" class="level-btn bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-5 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400">Advanced</button>
+                <button id="expertBtn" class="level-btn bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-5 rounded-full shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400">Expert</button>
+            </div>
+
+            <!-- Generate Button -->
+            <button id="generateTwisterBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-200 mb-6 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <span>Generate Tongue Twister</span>
+                <div id="twisterLoadingIndicator" class="loading-spinner hidden"></div>
+            </button>
+
+            <!-- Tongue Twister Output -->
+            <div class="bg-blue-50 p-6 rounded-xl border border-blue-200 min-h-[120px] flex items-center justify-center text-center text-xl italic text-gray-700 mb-6 shadow-inner" id="tongueTwisterOutput">
+                Click a difficulty level or 'Generate' to get started!
+            </div>
+
+            <!-- Listen Button -->
+            <button id="listenBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1V9a1 1 0 011-1h1.586l4.707-4.707C10.923 3.686 11.5 4.104 11.5 5v14c0 .896-.577 1.314-1.207.687L5.586 15z" />
+                </svg>
+                <span>Listen</span>
+            </button>
+        </section>
+
+        <!-- Grammar Corrector Section -->
+        <section class="bg-white p-8 rounded-2xl shadow-xl border border-green-100">
+            <h2 class="text-3xl font-bold text-green-600 mb-6 text-center">Grammar Corrector</h2>
+
+            <!-- Input Text Area -->
+            <label for="grammarInput" class="block text-gray-700 text-lg font-medium mb-2">Enter your text here:</label>
+            <textarea id="grammarInput" class="w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:border-transparent transition-all duration-200 resize-y min-h-[150px] mb-6 shadow-inner" placeholder="Type or paste your text..."></textarea>
+
+            <!-- Correct Button -->
+            <button id="correctGrammarBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all duration-200 mb-6 flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <span>Correct Grammar</span>
+                <div id="grammarLoadingIndicator" class="loading-spinner hidden"></div>
+            </button>
+
+            <!-- Corrected Output Area -->
+            <label for="correctedOutput" class="block text-gray-700 text-lg font-medium mb-2">Corrected Version:</label>
+            <textarea id="correctedOutput" class="w-full p-4 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 focus:outline-none resize-y min-h-[150px] shadow-inner" readonly placeholder="Your corrected text will appear here."></textarea>
+        </section>
+    </main>
+
+    <!-- Custom Alert Modal -->
+    <div id="customAlertModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full text-center border border-red-200">
+            <h3 class="text-2xl font-bold text-red-600 mb-4">Oops!</h3>
+            <p id="alertMessage" class="text-gray-700 mb-6">Something went wrong.</p>
+            <button id="alertCloseBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-lg shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // IMPORTANT: Replace "YOUR_GEMINI_API_KEY" with your actual Gemini API Key.
+        // You can get one from Google AI Studio: https://aistudio.google.com/app/apikey
+        const apiKey = "YOUR_GEMINI_API_KEY";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+        // Get DOM elements
+        const basicBtn = document.getElementById('basicBtn');
+        const intermediateBtn = document.getElementById('intermediateBtn');
+        const advancedBtn = document.getElementById('advancedBtn');
+        const expertBtn = document.getElementById('expertBtn');
+        const generateTwisterBtn = document.getElementById('generateTwisterBtn');
+        const tongueTwisterOutput = document.getElementById('tongueTwisterOutput');
+        const listenBtn = document.getElementById('listenBtn');
+        const twisterLoadingIndicator = document.getElementById('twisterLoadingIndicator');
+
+        const grammarInput = document.getElementById('grammarInput');
+        const correctGrammarBtn = document.getElementById('correctGrammarBtn');
+        const correctedOutput = document.getElementById('correctedOutput');
+        const grammarLoadingIndicator = document.getElementById('grammarLoadingIndicator');
+
+        const customAlertModal = document.getElementById('customAlertModal');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertCloseBtn = document.getElementById('alertCloseBtn');
+
+        let selectedDifficulty = 'Basic'; // Default difficulty
+
+        // --- Utility Functions ---
+
+        /**
+         * Displays a custom alert modal with a given message.
+         * @param {string} message - The message to display in the alert.
+         */
+        function showAlert(message) {
+            alertMessage.textContent = message;
+            customAlertModal.classList.remove('hidden');
+        }
+
+        /**
+         * Hides the custom alert modal.
+         */
+        function hideAlert() {
+            customAlertModal.classList.add('hidden');
+        }
+
+        /**
+         * Shows a loading spinner and disables a button.
+         * @param {HTMLElement} loadingElement - The loading spinner element.
+         * @param {HTMLElement} buttonElement - The button to disable.
+         */
+        function showLoading(loadingElement, buttonElement) {
+            loadingElement.classList.remove('hidden');
+            buttonElement.disabled = true;
+            buttonElement.classList.add('opacity-70', 'cursor-not-allowed');
+        }
+
+        /**
+         * Hides a loading spinner and enables a button.
+         * @param {HTMLElement} loadingElement - The loading spinner element.
+         * @param {HTMLElement} buttonElement - The button to enable.
+         */
+        function hideLoading(loadingElement, buttonElement) {
+            loadingElement.classList.add('hidden');
+            buttonElement.disabled = false;
+            buttonElement.classList.remove('opacity-70', 'cursor-not-allowed');
+        }
+
+        /**
+         * Updates the styling of difficulty buttons based on the selected one.
+         */
+        function updateDifficultyButtonStyles() {
+            document.querySelectorAll('.level-btn').forEach(btn => {
+                btn.classList.remove('border-2', 'border-blue-700', 'scale-105');
+                btn.classList.add('shadow-md');
+            });
+            const currentBtn = document.getElementById(`${selectedDifficulty.toLowerCase()}Btn`);
+            if (currentBtn) {
+                currentBtn.classList.add('border-2', 'border-blue-700', 'scale-105');
+                currentBtn.classList.remove('shadow-md');
+            }
+        }
+
+        // --- Tongue Twister Functions ---
+
+        /**
+         * Generates a tongue twister using the Gemini API based on the selected difficulty.
+         */
+        async function generateTongueTwister() {
+            if (apiKey === "YOUR_GEMINI_API_KEY" || apiKey === "") {
+                showAlert("Please replace 'YOUR_GEMINI_API_KEY' in the code with your actual Gemini API key to enable AI features.");
+                return;
+            }
+
+            showLoading(twisterLoadingIndicator, generateTwisterBtn);
+            tongueTwisterOutput.textContent = 'Generating a new tongue twister...';
+            listenBtn.disabled = true; // Disable listen button while generating
+
+            const prompt = `Generate a ${selectedDifficulty} level tongue twister. Provide only the tongue twister text, no extra explanations or formatting.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${response.status} - ${errorData.error.message || response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    tongueTwisterOutput.textContent = text.trim();
+                } else {
+                    showAlert('Failed to generate tongue twister. The AI response was unexpected. Please try again.');
+                    tongueTwisterOutput.textContent = 'Could not generate a tongue twister.';
+                }
+            } catch (error) {
+                console.error('Error generating tongue twister:', error);
+                showAlert(`An error occurred while generating the tongue twister: ${error.message}. Please ensure your API key is correct and your internet connection is stable.`);
+                tongueTwisterOutput.textContent = 'Error generating tongue twister.';
+            } finally {
+                hideLoading(twisterLoadingIndicator, generateTwisterBtn);
+                listenBtn.disabled = false; // Re-enable listen button
+            }
+        }
+
+        /**
+         * Speaks the current tongue twister text using the Web Speech API.
+         */
+        function speakTongueTwister() {
+            const textToSpeak = tongueTwisterOutput.textContent;
+            if (!textToSpeak || textToSpeak.includes('Click a difficulty level') || textToSpeak.includes('Generating a new tongue twister') || textToSpeak.includes('Error generating')) {
+                showAlert('Please generate a valid tongue twister first!');
+                return;
+            }
+
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+                utterance.lang = 'en-US'; // Set language for better pronunciation
+                speechSynthesis.speak(utterance);
+            } else {
+                showAlert('Your browser does not support the Web Speech API for text-to-speech.');
+            }
+        }
+
+        // --- Grammar Corrector Functions ---
+
+        /**
+         * Corrects grammar, spelling, and punctuation using the Gemini API.
+         */
+        async function correctGrammar() {
+            if (apiKey === "YOUR_GEMINI_API_KEY" || apiKey === "") {
+                showAlert("Please replace 'YOUR_GEMINI_API_KEY' in the code with your actual Gemini API key to enable AI features.");
+                return;
+            }
+
+            const inputText = grammarInput.value.trim();
+            if (!inputText) {
+                showAlert('Please enter some text to correct.');
+                return;
+            }
+
+            showLoading(grammarLoadingIndicator, correctGrammarBtn);
+            correctedOutput.value = 'Correcting your text...';
+
+            const prompt = `Correct any grammar, spelling, and punctuation mistakes in the following text and provide only the corrected version, without any additional comments or explanations:\n\n"${inputText}"`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error: ${response.status} - ${errorData.error.message || response.statusText}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const correctedText = result.candidates[0].content.parts[0].text;
+                    correctedOutput.value = correctedText.trim();
+                } else {
+                    showAlert('Failed to correct grammar. The AI response was unexpected. Please try again.');
+                    correctedOutput.value = 'Could not correct text.';
+                }
+            } catch (error) {
+                console.error('Error correcting grammar:', error);
+                showAlert(`An error occurred while correcting grammar: ${error.message}. Please ensure your API key is correct and your internet connection is stable.`);
+                correctedOutput.value = 'Error correcting text.';
+            } finally {
+                hideLoading(grammarLoadingIndicator, correctGrammarBtn);
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Difficulty level buttons
+        basicBtn.addEventListener('click', () => { selectedDifficulty = 'Basic'; updateDifficultyButtonStyles(); generateTongueTwister(); });
+        intermediateBtn.addEventListener('click', () => { selectedDifficulty = 'Intermediate'; updateDifficultyButtonStyles(); generateTongueTwister(); });
+        advancedBtn.addEventListener('click', () => { selectedDifficulty = 'Advanced'; updateDifficultyButtonStyles(); generateTongueTwister(); });
+        expertBtn.addEventListener('click', () => { selectedDifficulty = 'Expert'; updateDifficultyButtonStyles(); generateTongueTwister(); });
+
+        // Generate Tongue Twister button
+        generateTwisterBtn.addEventListener('click', generateTongueTwister);
+
+        // Listen button
+        listenBtn.addEventListener('click', speakTongueTwister);
+
+        // Correct Grammar button
+        correctGrammarBtn.addEventListener('click', correctGrammar);
+
+        // Close alert button
+        alertCloseBtn.addEventListener('click', hideAlert);
+
+        // Initial setup on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDifficultyButtonStyles(); // Set initial styling for Basic
+            // You can optionally generate a basic tongue twister on load
+            // generateTongueTwister();
+        });
+
+    </script>
+</body>
+</html>
